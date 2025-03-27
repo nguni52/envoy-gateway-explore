@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.33.0
+    ports:
+      - "9901:9901"
+      - "10000:10000"
+    command: >
+      -c /etc/envoy/envoy.yaml
+      -l off
+      --component-log-level upstream:debug,connection:trace
+    restart: always
+    volumes:
+      - ./envoy-demo.yaml:/etc/envoy/envoy.yaml

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  ambassador:
+    image: quay.io/datawire/ambassador:latest
+    container_name: ambassador
+    ports:
+      - "8080:8080" # Ambassador admin UI
+      - "8443:8443" # Ambassador HTTPS
+    environment:
+      - AMBASSADOR_NAMESPACE=default
+    volumes:
+      - ./ambassador-config:/ambassador-config

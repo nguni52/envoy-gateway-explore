@@ -1,0 +1,1 @@
+{"resources":[{"@type":"type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.Secret","name":"xds_trusted_ca","validation_context":{"trusted_ca":{"filename":"/tmp/envoy-gateway/certs/envoy/ca.crt"},"match_typed_subject_alt_names":[{"san_type":"DNS","matcher":{"exact":"envoy-gateway"}}]}}]}
