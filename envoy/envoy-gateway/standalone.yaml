@@ -14,7 +14,7 @@ provider:
       host: {}
 logging:
   level:
-    default: info
+    default: debug
 extensionApis:
   enableBackend: true
   enableOAuth: true

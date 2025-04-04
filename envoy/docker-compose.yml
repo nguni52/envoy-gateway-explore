@@ -25,7 +25,7 @@ services:
       - EG_PROVIDER_CUSTOM_RESOURCE_TYPE=File
       - EG_PROVIDER_CUSTOM_RESOURCE_FILE_PATHS=/etc/envoy-gateway/config.yaml
       - EG_PROVIDER_CUSTOM_INFRASTRUCTURE_TYPE=Host
-      - EG_LOG_LEVEL=info
+      - EG_LOG_LEVEL=debug
     networks:
       - envoy-gateway-test
     depends_on:
@@ -49,9 +49,9 @@ services:
     volumes:
       - ../:/app
     working_dir: /app
-    command: python3 -m http.server 8080
+    command: python3 -m http.server 8090
     ports:
-      - "8090:8080"
+      - "8090:8090"
 
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.1
@@ -83,59 +83,3 @@ networks:
   envoy-gateway-test:
     name: envoy-gateway-test
     driver: bridge
-
-
-
-# version: '3.8'
-
-# services:
-#   envoy-gateway:
-#     image: envoyproxy/gateway:v1.3.2
-#     container_name: envoy-gateway
-#     networks:
-#       - envoy-gateway-test
-#     ports:
-#       - "8888:8888"  # Admin interface
-#       - "80:80"      # HTTP traffic
-#     volumes:
-#       - ./envoy-gateway-test:/etc/envoy-gateway
-#     environment:
-#       - ENVOY_UID=0
-#       - ENVOY_GID=0
-#       - EG_NAMESPACE=default
-#     command: server --config-path /etc/envoy-gateway/standalone.yaml
-
-#   test-backend:
-#     image: python:3.13-slim
-#     container_name: test-backend
-#     networks:
-#       - envoy-gateway-test
-#     volumes:
-#       - ../:/app
-#     working_dir: /app
-#     command: python3 -m http.server 8080
-#     ports:
-#       - "8080:8080"
-
-#   # # Add backend services if they need to be run locally
-#   # test-zmw-dfsp2-ttk-frontend:
-#   #   container_name: test-zmw-dfsp2-ttk-frontend
-#   #   image:  mojaloop/ml-testing-toolkit-ui:v15.3.0  # Replace with actual image
-#   #   networks:
-#   #     - envoy-gateway-test
-#   #   hostname: localhost
-#   #   ports:
-#   #     - "6060:6060"
-
-#   # ory-authz:
-#   #   image: oryd/hydra:v2.3.0  # Replace with actual image
-#   #   networks:
-#   #     - envoy-gateway-test
-#   #   hostname: ory-authz
-#   #   ports:
-#   #     - "9001:9001"
-
-# networks:
-#   envoy-gateway-test:
-#     name: envoy-gateway-test
-#     driver: bridge 

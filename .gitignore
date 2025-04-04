@@ -1,0 +1,7 @@
+envoy/tmp/*
+envoy/keycloak-data/*
+envoy/keycloak-cache/*
+envoy/keycloak-tmp/*
+envoy/envoy-gateway/certs/*
+envoy/envoy-gateway/envoy-gateway-certs/*
+envoy/envoy-gateway/envoy-gateway-certs/*
