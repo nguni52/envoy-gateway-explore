@@ -1,0 +1,13 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: RateLimitFilter
+metadata:
+  name: rate-limit-filter
+spec:
+  type: Global
+  global:
+    rules:
+      - clientSelectors:
+          - sourceIP: {}
+        limit:
+          requests: 3
+          unit: Second 

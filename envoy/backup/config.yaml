@@ -1,0 +1,111 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyGateway
+metadata:
+  name: eg
+spec:
+  gateway:
+    controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  provider:
+    type: Custom
+    custom:
+      resource:
+        type: File
+        file:
+          paths: ["/etc/envoy-gateway"]
+      infrastructure:
+        type: Host
+        host: {}
+  logging:
+    level:
+      default: debug
+  extensionApis:
+    enableBackend: true
+    enableOAuth: true
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: GatewayClass
+metadata:
+  name: eg
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: Gateway
+metadata:
+  name: eg
+spec:
+  gatewayClassName: eg
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 8080
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: HTTPRoute
+metadata:
+  name: backend
+spec:
+  parentRefs:
+    - name: eg
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: OAuth2Filter
+            name: oauth2-filter
+      backendRefs:
+        - name: test-backend
+          port: 8090
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: OAuth2Filter
+metadata:
+  name: oauth2-filter
+spec:
+  type: OIDC
+  oidc:
+    provider:
+      issuer: "https://your-oauth-provider.com"  # Replace with your OAuth provider's issuer URL
+      clientId: "your-client-id"                 # Replace with your client ID
+      clientSecret: "your-client-secret"         # Replace with your client secret
+      redirectUri: "http://localhost:8080/callback"
+      scopes:
+        - "openid"
+        - "profile"
+        - "email"
+    session:
+      type: Cookie
+      cookie:
+        name: "oauth2_session"
+        ttl: 3600  # 1 hour in seconds
+    callback:
+      path: "/callback"
+      successRedirect: "/"
+      failureRedirect: "/login"
+    protectedPaths:
+      - path: "/"
+        methods: ["GET", "POST", "PUT", "DELETE"]
+      - path: "/api"
+        methods: ["GET", "POST", "PUT", "DELETE"]
+    publicPaths:
+      - path: "/login"
+        methods: ["GET"]
+      - path: "/callback"
+        methods: ["GET"]
+      - path: "/public"
+        methods: ["GET"]
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: test-backend
+spec:
+  endpoints:
+    - ip:
+        address: test-backend
+        port: 8080

@@ -8,17 +8,30 @@ services:
       - "8080:8080"
       - "8443:8443"
       - "8888:8888"
+      - "19000:19000"
+      - "19001:19001"
+      - "8081:8081"
     volumes:
-      - ./envoy-gateway-test:/etc/envoy-gateway
+      - ./envoy-gateway:/etc/envoy-gateway
       - ./certs:/tmp/envoy-gateway/certs
+      - ./tmp:/tmp/envoy-gateway
     command: server --config-path /etc/envoy-gateway/standalone.yaml
     environment:
       - EG_EXTENSION_APIS_ENABLE_BACKEND=true
+      - EG_EXTENSION_APIS_ENABLE_OAUTH=true
       - ENVOY_GATEWAY_NAMESPACE=default
+      - EG_GATEWAY_CONTROLLER_NAME=gateway.envoyproxy.io/gatewayclass-controller
+      - EG_PROVIDER_TYPE=Custom
+      - EG_PROVIDER_CUSTOM_RESOURCE_TYPE=File
+      - EG_PROVIDER_CUSTOM_RESOURCE_FILE_PATHS=/etc/envoy-gateway/config.yaml
+      - EG_PROVIDER_CUSTOM_INFRASTRUCTURE_TYPE=Host
+      - EG_LOG_LEVEL=info
     networks:
       - envoy-gateway-test
     depends_on:
       - redis
+      - test-backend
+      - keycloak
   
   redis:
     image: redis:7.0-alpine
@@ -39,6 +52,32 @@ services:
     command: python3 -m http.server 8080
     ports:
       - "8090:8080"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=dev-file
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_HTTP_ENABLED=true
+      - KC_PROXY=edge
+      - JAVA_OPTS=-Djboss.bind.address=0.0.0.0 -Djboss.bind.address.private=0.0.0.0 -Dvertx.cacheDirBase=/opt/keycloak/cache -Djava.io.tmpdir=/opt/keycloak/tmp
+    volumes:
+      - ./keycloak-data:/opt/keycloak/data
+      - ./keycloak-cache:/opt/keycloak/cache
+      - ./keycloak-tmp:/opt/keycloak/tmp
+    ports:
+      - "8085:8080"
+    networks:
+      - envoy-gateway-test
+    command:
+      - start-dev
+      - --hostname=localhost
+      - --hostname-port=8085
+      - --hostname-strict-backchannel=false
 
 networks:
   envoy-gateway-test:

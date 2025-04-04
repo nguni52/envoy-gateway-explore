@@ -1,0 +1,8 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: RateLimitInfrastructure
+metadata:
+  name: rate-limit-infra
+spec:
+  type: Redis
+  redis:
+    url: redis://redis-ratelimit:6379 

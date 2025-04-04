@@ -1,0 +1,37 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: OAuth2Filter
+metadata:
+  name: oauth2-filter
+spec:
+  type: OIDC
+  oidc:
+    provider:
+      issuer: "https://your-oauth-provider.com"  # Replace with your OAuth provider's issuer URL
+      clientId: "your-client-id"                 # Replace with your client ID
+      clientSecret: "your-client-secret"         # Replace with your client secret
+      redirectUri: "http://localhost:8080/callback"
+      scopes:
+        - "openid"
+        - "profile"
+        - "email"
+    session:
+      type: Cookie
+      cookie:
+        name: "oauth2_session"
+        ttl: 3600  # 1 hour in seconds
+    callback:
+      path: "/callback"
+      successRedirect: "/"
+      failureRedirect: "/login"
+    protectedPaths:
+      - path: "/"
+        methods: ["GET", "POST", "PUT", "DELETE"]
+      - path: "/api"
+        methods: ["GET", "POST", "PUT", "DELETE"]
+    publicPaths:
+      - path: "/login"
+        methods: ["GET"]
+      - path: "/callback"
+        methods: ["GET"]
+      - path: "/public"
+        methods: ["GET"] 
