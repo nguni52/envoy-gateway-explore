@@ -11,7 +11,9 @@ provider:
         paths: ["/etc/envoy-gateway/config.yaml"]
     infrastructure:
       type: Host
-      host: {}
+      host:
+        name: envoy-gateway
+        namespace: envoy-gateway-system
 logging:
   level:
     default: debug

@@ -5,7 +5,7 @@ services:
     container_name: envoy-gateway
     image: envoyproxy/gateway:v1.3.2
     ports:
-      - "8080:8080"
+      # - "8080:8080"
       - "8443:8443"
       - "8888:8888"
       - "19000:19000"
@@ -13,13 +13,15 @@ services:
       - "8081:8081"
     volumes:
       - ./envoy-gateway:/etc/envoy-gateway
-      - ./certs:/tmp/envoy-gateway/certs
+      - ./certs/envoy-oidc-hmac:/tmp/envoy-gateway/certs/envoy-oidc-hmac
+      - ./certs/envoy:/tmp/envoy-gateway/certs/envoy
+      - ./certs/envoy-gateway:/tmp/envoy-gateway/certs/envoy-gateway
       - ./tmp:/tmp/envoy-gateway
     command: server --config-path /etc/envoy-gateway/standalone.yaml
     environment:
       - EG_EXTENSION_APIS_ENABLE_BACKEND=true
       - EG_EXTENSION_APIS_ENABLE_OAUTH=true
-      - ENVOY_GATEWAY_NAMESPACE=default
+      - ENVOY_GATEWAY_NAMESPACE=envoy-gateway-system
       - EG_GATEWAY_CONTROLLER_NAME=gateway.envoyproxy.io/gatewayclass-controller
       - EG_PROVIDER_TYPE=Custom
       - EG_PROVIDER_CUSTOM_RESOURCE_TYPE=File
