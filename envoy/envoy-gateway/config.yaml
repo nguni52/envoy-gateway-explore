@@ -32,9 +32,6 @@ spec:
       - name: gateway-cert
         kind: Secret
         namespace: envoy-gateway-system
-    allowedRoutes:
-      namespaces:
-        from: All
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -51,75 +48,19 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - group: gateway.envoyproxy.io
-          kind: Backend
-          name: test-backend
+        - name: test-backend
           port: 8090
           weight: 1
 ---
-apiVersion: gateway.envoyproxy.io/v1alpha1
-kind: Backend
+apiVersion: v1
+kind: Service
 metadata:
   name: test-backend
   namespace: envoy-gateway-system
 spec:
-  endpoints:
-    - ip:
-        address: 192.168.1.118
-        port: 8090
----
-apiVersion: gateway.envoyproxy.io/v1alpha1
-kind: BackendTrafficPolicy
-metadata:
-  name: default-ipv-policy
-  namespace: envoy-gateway-system
-spec:
-  targetRef:
-    group: gateway.networking.k8s.io
-    kind: Gateway
-    name: eg
-  rateLimit:
-    type: Global
-    local:
-      rules:
-      - clientSelectors:
-        limit:
-          requests: 3
-          unit: Hour
----
-apiVersion: gateway.envoyproxy.io/v1alpha1
-kind: SecurityPolicy
-metadata:
-  name: oauth2-policy
-  namespace: envoy-gateway-system
-spec:
-  targetRef:
-    group: gateway.networking.k8s.io
-    kind: HTTPRoute
-    name: backend
-  authorization:
-    defaultAction: Deny
-    rules:
-    - action: Allow
-      principal:
-        clientCIDRs:
-        - 172.18.0.1/32
-        - 192.168.1.118/32
-
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: redis
-#   namespace: redis-system 
-#   labels:
-#     app: redis
-#   annotations:
-# spec:
-#   ports:
-#   - name: redis
-#     port: 6379
-#     protocol: TCP
-#     targetPort: 6379
-#   selector:
-#     app: redis
+  ports:
+    - port: 8090
+      targetPort: 8090
+      protocol: TCP
+  selector:
+    app: test-backend
