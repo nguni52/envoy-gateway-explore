@@ -17,6 +17,11 @@ provider:
 logging:
   level:
     default: debug
+rateLimit:
+      backend:
+        type: Redis
+        redis:
+          url: redis:6379
 extensionApis:
   enableBackend: true
   enableOAuth: true
