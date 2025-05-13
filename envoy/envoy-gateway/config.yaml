@@ -56,11 +56,7 @@ spec:
     type: Local
     local:
       rules:
-      - clientSelectors:
-        - headers:
-          - name: x-user-id
-            value: one
-        limit:
+      - limit:
           requests: 3
           unit: Hour
 # ---
