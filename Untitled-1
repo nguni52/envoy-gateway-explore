@@ -1,0 +1,69 @@
+curl -X POST -H "Content-Type: application/json" -d '{"target_url":"http://example.com","scan_type":"vuln"}' http://localhost:5001/scan -v
+
+curl -X POST -H "Content-Type: application/json" -d '{"target_url":"http://ec2-108-129-184-158.eu-west-1.compute.amazonaws.com:8146","scan_type":"vuln"}' http://localhost:5001/scan -v
+
+curl -X POST -d "username=admin&password=adminpass" http://localhost:5001/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:5001/mfa
+
+curl -v -b "session=.eJwlT8tqwzAQ_BWhcwiSVpZk33LpqYXeSwib3ZUj8KNYdqGE_HsFPc2DYZh56luesD6k6uHrqdXeQM9SK46iT_p9HUdhVRZVD6Jm52Oafs_qcxKsomidvyfZRX28XdSPbCUXwr2sy1lvX9dT696kPvSwb4c0VVgPGhIFAx4su8SenWDXN3JngN53EFJ0NnAPYtCzeGOM2M6gyT4GCdEEB3cbvXE9eh9zD45tTyCEuQUZXKCQkLLLGQkMGxsC5ZgspACRYnt1O6ps_2uQ57Lo1x8CS0-t.aBi9QA.iC9tPk4pRus0GCNthqGySjky4UU" http://localhost:5001/mfa
+
+curl -X POST -d "username=admin&password=adminpass" http://localhost:5001/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:5001/mfa
+
+curl -X POST -d "username=admin&password=adminpass" http://localhost:5001/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:5001/mfa
+
+curl -v http://localhost:5001/
+
+curl -X POST -H "Content-Type: application/json" -d '{"target_url":"http://ec2-108-129-184-158.eu-west-1.compute.amazonaws.com:8146","scan_type":"vuln"}' http://localhost:5001/scan -v
+
+curl -X POST -d "username=admin&password=adminpass" http://localhost:5001/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:5001/mfa
+
+curl -X POST -d "otp=221243" http://localhost:5001/mfa -v -b cookies.txt -c cookies.txt
+
+curl -X POST -d "username=admin&password=adminpass" http://localhost:5001/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:5001/mfa
+
+curl -X POST -d "otp=043993" http://localhost:5001/mfa -v -b cookies.txt -c cookies.txt
+
+curl -X POST -H "Content-Type: application/json" -d '{"target_url":"http://ec2-108-129-184-158.eu-west-1.compute.amazonaws.com:8146","scan_type":"vuln"}' http://localhost:5001/scan -v -b cookies.txt
+
+curl -X POST -H "Content-Type: application/json" -d '{"target_url":"http://ec2-108-129-184-158.eu-west-1.compute.amazonaws.com:8146","scan_type":"vuln"}' http://localhost:5001/scan -v -b cookies.txt
+
+curl -X POST -d "username=admin&password=adminpass" http://localhost:80/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:80/mfa
+
+curl -X POST -d "otp=624800" http://localhost:80/mfa -v -b cookies.txt -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:80/mfa
+
+curl -X POST -d "otp=728076" http://localhost:80/mfa -v -b cookies.txt -c cookies.txt
+
+curl -X POST -d "username=admin&password=adminpass" http://localhost:80/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:80/mfa
+
+curl -X POST -d "otp=410383" http://localhost:80/mfa -v -b cookies.txt -c cookies.txt
+
+curl -X POST -d "username=admin&password=adminpass" http://localhost:80/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:80/mfa
+
+curl -X POST -d "otp=502261" http://localhost:80/mfa -v -b cookies.txt -c cookies.txt
+
+curl -v -b cookies.txt http://localhost:80/dashboard
+
+curl -X POST -d "username=admin&password=adminpass" http://ec2-13-247-100-236.af-south-1.compute.amazonaws.com/login/credentials -v -H "Content-Type: application/x-www-form-urlencoded" -c cookies.txt
+
+curl -v -b cookies.txt http://ec2-13-247-100-236.af-south-1.compute.amazonaws.com/mfa
+
+curl -X POST -d "otp=146903" http://ec2-13-247-100-236.af-south-1.compute.amazonaws.com/mfa -v -b cookies.txt -c cookies.txt
+
+curl -v -b cookies.txt http://ec2-13-247-100-236.af-south-1.compute.amazonaws.com/dashboard 
