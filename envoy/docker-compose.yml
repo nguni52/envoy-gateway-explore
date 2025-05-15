@@ -3,9 +3,8 @@ version: '3.8'
 services:
   envoy-gateway:
     container_name: envoy-gateway
-    image: envoyproxy/gateway:v1.3.2
+    image: envoyproxy/gateway:v1.4.0
     ports:
-      - "8080:8080"
       - "8443:8443"
       - "8888:8888"
       - "19000:19000"
@@ -17,6 +16,7 @@ services:
       - ./certs/envoy:/tmp/envoy-gateway/certs/envoy
       - ./certs/envoy-gateway:/tmp/envoy-gateway/certs/envoy-gateway
       - ./tmp:/tmp/envoy-gateway
+      - ./certs:/etc/envoy-gateway/certs
     command: server --config-path /etc/envoy-gateway/standalone.yaml
     environment:
       - EG_EXTENSION_APIS_ENABLE_BACKEND=true
